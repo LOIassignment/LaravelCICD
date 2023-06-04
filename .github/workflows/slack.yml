@@ -13,7 +13,7 @@ jobs:
 
     - name: Notify Slack
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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 
       run: |
         curl -X POST -H 'Content-type: application/json' --data '{
           "text": "Laravel application successfully deployed to EC2 instance!",
