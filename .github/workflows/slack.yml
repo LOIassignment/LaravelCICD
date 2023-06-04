@@ -1,0 +1,43 @@
+name: slack message
+on:
+  push:
+    branches:
+    - master
+    
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Notify Slack
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data '{
+          "text": "Laravel application successfully deployed to EC2 instance!",
+          "attachments": [
+            {
+              "color": "#36a64f",
+              "title": "Deployment Details",
+              "fields": [
+                {
+                  "title": "Repository",
+                  "value": "Your Repository",
+                  "short": true
+                },
+                {
+                  "title": "Branch",
+                  "value": "${{ github.ref }}",
+                  "short": true
+                },
+                {
+                  "title": "Commit",
+                  "value": "<${{ github.event.compare }}|${{ github.sha }}>",
+                  "short": true
+                }
+              ]
+            }
+          ]
+        }' $SLACK_WEBHOOK_URL
